@@ -1,79 +1,29 @@
 # AWS EC2 Deployment & Automation
 
 ## Overview
-Deployed and automated a live web server on AWS EC2 from scratch — covering manual
-configuration, infrastructure security, and progressing to fully automated,
-template-based server provisioning.
-
-## What was built
-- Launched an EC2 instance (Amazon Linux 2023, t3.micro) in a custom security group
-- Configured inbound/outbound security group rules (SSH restricted to a single IP, HTTP open publicly)
-- Installed and configured Apache manually, and served a custom HTML page
-- Connected via AWS Systems Manager Session Manager (IAM role-based access, no SSH keys
-  or open SSH port required)
-- Took an EBS snapshot for backup/recovery
-- Allocated and associated an Elastic IP for a persistent public address
-- Wrote a bootstrap (user data) script to fully automate server setup on launch
-  (Apache install + config + custom page, zero manual steps)
-- Built a custom AMI ("golden image") baking in the fully configured server, and
-  proved a new instance launched from it boots ready-to-serve with no script at all
-- Created a reusable Launch Template combining AMI, instance type, security group,
-  and IAM role for repeatable deployments
-
-## Skills demonstrated
-IAM (users, roles, least-privilege policies) · EC2 · Security Groups & Network ACLs ·
-EBS (volumes, snapshots) · Elastic IPs · Bash scripting (user data) · AMIs/Launch Templates ·
-Linux system administration (Amazon Linux 2023, systemctl, Apache/httpd)
-
-## Real problems hit and fixed (not just a clean tutorial run)
-- **SSH connectivity failures**: EC2 Instance Connect repeatedly failed from a mobile
-  browser; root-caused to the connection needing to match the client's real-time public
-  IP, which changes frequently on cellular data. Solved by switching to Session Manager
-  (IAM-based access, no inbound SSH dependency at all).
-- **Wrong security group edited**: initially modified a security group not actually
-  attached to the running instance; found and fixed by cross-referencing the instance's
-  actual attached security group ID.
-- **Wrong AWS region**: an Elastic IP allocated in `us-east-1` couldn't attach to an
-  instance running in `eu-north-1` — Elastic IPs are region-scoped; reallocated in the
-  correct region.
-- **Silent user data script failure**: a multi-line bootstrap script failed with
-  "No such file or directory" — diagnosed via `/var/log/cloud-init-output.log`, which
-  showed all script lines had been collapsed onto a single line by the input method.
-  Fixed by joining commands with semicolons instead of relying on line breaks.
-- **Session Manager not connecting**: root-caused to no IAM role being attached to the
-  instance; fixed by attaching an `AmazonSSMManagedInstanceCore` role and rebooting to
-  force the SSM agent to pick up new credentials.
+Deployed, secured, automated, and scaled a web server on AWS EC2 — progressing from
+a single manually-configured instance to a self-healing, load-balanced, HTTPS-secured
+web tier, entirely using free-tier and free-cost resources.
 
 ## Architecture
-Single EC2 instance in the default VPC, public subnet, Elastic IP attached, Apache
-serving HTTP on port 80, Session Manager for shell access via IAM role instead of SSH.
+A web tier running on Amazon Linux 2023, originally a single manually-configured
+instance, later extended with a reusable Launch Template, an Auto Scaling Group
+(1-3 instances across multiple Availability Zones), and an Application Load Balancer.
+Traffic is served over HTTPS using a free domain and a Let's Encrypt certificate.
+Access is via AWS Systems Manager Session Manager (IAM role-based, no open SSH port).
 
-## Update: Auto Scaling & Load Balancing
+## Skills demonstrated
+IAM · EC2 · Security Groups & Network ACLs · EBS (volumes, snapshots) · Elastic IPs ·
+Bash scripting (user data) · Custom AMIs & Launch Templates · Auto Scaling Groups
+(self-healing infrastructure) · Application Load Balancers & Target Groups ·
+CloudWatch metrics & alarms · EC2 cost models (On-Demand vs Spot) · DNS · TLS/SSL
+certificate issuance (Let's Encrypt/ACME) · Apache configuration · Linux system
+administration and dependency troubleshooting
 
-Extended the project from a single manually-managed server to a self-healing,
-load-balanced web tier.
+## Detailed write-ups
+- [Core Deployment & Security](docs/01-core-deployment.md)
+- [Automation & Golden Images](docs/02-automation-and-golden-images.md)
+- [Auto Scaling & Load Balancing](docs/03-auto-scaling-and-load-balancing.md)
+- [HTTPS with a Free Domain and Let's Encrypt](docs/04-https-lets-encrypt.md)
 
-### What was added
-- **Launch Template** (`web-server-template`) bundling the custom AMI, instance type,
-  security group, and IAM role into one reusable launch configuration
-- **Auto Scaling Group** (min: 1, desired: 2, max: 3) that automatically maintains
-  healthy instance count, launching new instances from the Launch Template as needed
-- **Application Load Balancer** with a Target Group distributing traffic across all
-  healthy instances behind a single stable DNS endpoint
-- Verified self-healing by manually terminating a running instance and observing the
-  ASG automatically detect the loss and launch a replacement within minutes, restoring
-  desired capacity without manual intervention
-- Verified load balancing by accessing the site through the Load Balancer's DNS name
-  (rather than any individual instance IP) and confirming successful routing
-
-### Real problem hit and fixed
-- Attaching the Auto Scaling Group to an existing Target Group initially created a
-  second, unintended Target Group instead of using the one already wired to the Load
-  Balancer. Diagnosed by comparing registered targets across both Target Groups,
-  corrected by re-editing the ASG to explicitly attach to the existing Target Group,
-  then removed the orphaned one.
-
-### Updated skills demonstrated
-Launch Templates · Auto Scaling Groups (self-healing infrastructure) · Application
-Load Balancers & Target Groups · High-availability architecture across multiple
-subnets/Availability Zones
+Each write-up covers what was built and the real problems hit and fixed along the way.
