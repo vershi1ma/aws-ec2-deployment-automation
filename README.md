@@ -20,7 +20,7 @@ Bash scripting (user data) · Custom AMIs & Launch Templates · Auto Scaling Gro
 (self-healing infrastructure) · Application Load Balancers & Target Groups ·
 CloudWatch metrics & alarms · EC2 cost models (On-Demand vs Spot) · DNS · TLS/SSL
 certificate issuance (Let's Encrypt/ACME) · Apache configuration · Linux system
-administration and dependency troubleshooting · AWS KMS (customer-managed keys, envelope encryption) · S3 & EBS encryption at rest · CloudTrail (audit logging) · AWS CLI (Alpine Linux / iSH)
+administration and dependency troubleshooting · AWS KMS (customer-managed keys, envelope encryption) · S3 & EBS encryption at rest · CloudTrail (audit logging) · AWS CLI (Alpine Linux / iSH) · AWS Systems Manager Parameter Store & Secrets Manager
 
 ## Detailed write-ups
 - [Core Deployment & Security](docs/01-core-deployment.md)
@@ -30,5 +30,6 @@ administration and dependency troubleshooting · AWS KMS (customer-managed keys,
   - [HTTPS with a Free Domain and Let's Encrypt](docs/09-security-deep-dive/01-https-lets-encrypt.md)
   - [CloudTrail (Audit Logging)](docs/09-security-deep-dive/02-cloudtrail.md)
   - [Encryption at Rest (KMS, S3, EBS)](docs/09-security-deep-dive/03-encryption-at-rest.md)
+  - [Secrets Manager & Parameter Store](docs/09-security-deep-dive/04-secrets-manager.md)
 
 Each write-up covers what was built and the real problems hit and fixed along the way.
