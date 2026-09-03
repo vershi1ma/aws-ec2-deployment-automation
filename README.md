@@ -35,5 +35,6 @@ administration and dependency troubleshooting · AWS KMS (customer-managed keys,
   - [CloudTrail (Audit Logging)](docs/09-security-deep-dive/02-cloudtrail.md)
   - [Encryption at Rest (KMS, S3, EBS)](docs/09-security-deep-dive/03-encryption-at-rest.md)
   - [Secrets Manager & Parameter Store](docs/09-security-deep-dive/04-secrets-manager.md)
+  - [Patch Manager](docs/09-security-deep-dive/05-patch-manager.md)
 
 Each write-up covers what was built and the real problems hit and fixed along the way.
