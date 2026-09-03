@@ -1,9 +1,13 @@
-# AWS EC2 Deployment & Automation
+# AWS Cloud Engineering Portfolio
 
 ## Overview
-Deployed, secured, automated, scaled, and audited a web server on AWS EC2 — progressing from
-a single manually-configured instance to a self-healing, load-balanced, HTTPS-secured
-web tier, entirely using free-tier and free-cost resources.
+An evolving cloud engineering portfolio built while working toward a cloud/DevOps role.
+It started as a single EC2 web server and has grown into a self-healing, load-balanced,
+HTTPS-secured, encryption-hardened, and audit-logged web tier — with security
+(IAM, KMS, CloudTrail, Secrets Manager) treated as a first-class concern throughout,
+not bolted on at the end. Ongoing work extends into S3, serverless (Lambda), databases
+(RDS), and cloud-agnostic tooling (Terraform, containers, CI/CD), entirely using
+free-tier and free-cost resources.
 
 ## Architecture
 A web tier running on Amazon Linux 2023, originally a single manually-configured
