@@ -39,5 +39,7 @@ administration and dependency troubleshooting · AWS KMS (customer-managed keys,
   - [GuardDuty (Threat Detection)](docs/09-security-deep-dive/06-guardduty.md)
   - [DNS Firewall](docs/09-security-deep-dive/07-dns-firewall.md)
   - [Network Firewall](docs/09-security-deep-dive/08-network-firewall.md)
+  - Module 10 — S3
+    - [S3 Bucket Fundamentals](docs/10-s3/01-bucket-fundamentals.md)
 
 Each write-up covers what was built and the real problems hit and fixed along the way.
